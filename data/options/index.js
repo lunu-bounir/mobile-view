@@ -1,5 +1,7 @@
 'use strict';
 
+var info = document.getElementById('info');
+
 document.getElementById('save').addEventListener('click', () => {
   chrome.storage.local.set({
     'bypass-cache': document.getElementById('bypass-cache').checked,
@@ -8,7 +10,6 @@ document.getElementById('save').addEventListener('click', () => {
     'ua-kindle': document.getElementById('ua-kindle').value,
     'css': document.getElementById('css').value
   }, () => {
-    const info = document.getElementById('info');
     info.textContent = 'Options saved';
     window.setTimeout(() => info.textContent = '', 750);
   });
@@ -28,3 +29,22 @@ chrome.storage.local.get({
   document.getElementById('ua-kindle').value = prefs['ua-kindle'];
   document.getElementById('css').value = prefs['css'];
 });
+
+// reset
+document.getElementById('reset').addEventListener('click', e => {
+  if (e.detail === 1) {
+    info.textContent = 'Double-click to reset!';
+    window.setTimeout(() => info.textContent = '', 750);
+  }
+  else {
+    localStorage.clear();
+    chrome.storage.local.clear(() => {
+      chrome.runtime.reload();
+      window.close();
+    });
+  }
+});
+// support
+document.getElementById('support').addEventListener('click', () => chrome.tabs.create({
+  url: chrome.runtime.getManifest().homepage_url + '?rd=donate'
+}));
