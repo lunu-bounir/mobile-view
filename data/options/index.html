@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Switch to Mobile View :: Options</title>
+</head>
+<body>
+  <style>
+  body {
+    min-width: 500px;
+  }
+  textarea,
+    input[type=text] {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+  <table width="100%">
+    <colgroup>
+      <col width=28>
+      <col>
+    </colgroup>
+    <tbody>
+      <td>
+        <input type="checkbox" id="bypass-cache">
+      </td>
+      <td>
+        <label for="bypass-cache">Bypass browser's cache when switching to the mobile view</label>
+      </td>
+    </tbody>
+  </table>
+  <table width="100%">
+    <col width=70>
+    <col>
+    <tr>
+      <td>Android</td>
+      <td><input type="text" id="ua-android"></td>
+    </tr>
+    <tr>
+      <td>iOS</td>
+      <td><input type="text" id="ua-ios"></td>
+    </tr>
+    <tr>
+      <td>Kindle</td>
+      <td><input type="text" id="ua-kindle"></td>
+    </tr>
+  </table>
+  <p>
+    Apply the following styling rules to the page when mobile-view is enabled
+    <textarea id="css" rows="5" placeholder="e.g.: body {width: 500px !important}"></textarea>
+  </p>
+  <div>
+    <input type="button" value="Save" id="save">
+    <span id="info"></span>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
