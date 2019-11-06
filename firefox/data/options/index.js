@@ -1,6 +1,6 @@
 'use strict';
 
-var info = document.getElementById('info');
+const toast = document.getElementById('toast');
 
 document.getElementById('save').addEventListener('click', () => {
   chrome.storage.local.set({
@@ -10,8 +10,8 @@ document.getElementById('save').addEventListener('click', () => {
     'ua-kindle': document.getElementById('ua-kindle').value,
     'css': document.getElementById('css').value
   }, () => {
-    info.textContent = 'Options saved';
-    window.setTimeout(() => info.textContent = '', 750);
+    toast.textContent = 'Options saved';
+    window.setTimeout(() => toast.textContent = '', 750);
   });
 });
 
@@ -33,8 +33,8 @@ chrome.storage.local.get({
 // reset
 document.getElementById('reset').addEventListener('click', e => {
   if (e.detail === 1) {
-    info.textContent = 'Double-click to reset!';
-    window.setTimeout(() => info.textContent = '', 750);
+    toast.textContent = 'Double-click to reset!';
+    window.setTimeout(() => toast.textContent = '', 750);
   }
   else {
     localStorage.clear();

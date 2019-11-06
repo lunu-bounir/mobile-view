@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Temporary Mobile View",
   "description": "Temporarily switch the current tab into Android or iOS view",
   "permissions": [
@@ -22,7 +22,7 @@
     "256": "data/icons/256.png",
     "512": "data/icons/512.png"
   },
-  "homepage_url": "http://add0n.com/mobile-view.html",
+  "homepage_url": "https://add0n.com/mobile-view.html",
   "browser_action":{
     "default_icon": {
       "16": "data/icons/16.png",

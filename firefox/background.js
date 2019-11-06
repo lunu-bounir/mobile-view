@@ -1,6 +1,6 @@
 'use strict';
 
-var prefs = {
+const prefs = {
   'bypass-cache': false,
   'ua-android': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1',
   'ua-ios': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
@@ -9,8 +9,10 @@ var prefs = {
   'css': ''
 };
 
-var onClicked = tab => {
-  chrome.webRequest.onBeforeSendHeaders.removeListener(observers[tab.id]);
+const onClicked = tab => {
+  if (observers[tab.id]) {
+    chrome.webRequest.onBeforeSendHeaders.removeListener(observers[tab.id]);
+  }
   observers[tab.id] = ({requestHeaders}) => {
     for (let i = 0, name = requestHeaders[0].name; i < requestHeaders.length; i += 1, name = requestHeaders[i].name) {
       if (name === 'User-Agent' || name === 'user-agent') {
@@ -58,36 +60,48 @@ chrome.storage.local.get(prefs, ps => {
     checked: prefs.mode === 'kindle',
     contexts: ['browser_action']
   });
+  chrome.contextMenus.create({
+    title: 'Test my User-Agent',
+    id: 'test-ua',
+    contexts: ['browser_action']
+  });
 });
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  chrome.storage.local.set({
-    mode: info.menuItemId
-  }, () => onClicked(tab));
+  if (info.menuItemId === 'test-ua') {
+    chrome.tabs.create({
+      url: 'https://webbrowsertools.com/useragent/?method=normal&verbose=false&r=' + Math.random()
+    });
+  }
+  else {
+    chrome.storage.local.set({
+      mode: info.menuItemId
+    }, () => onClicked(tab));
+  }
 });
 
-var observers = {};
-var icons = {};
+const observers = {};
+const icons = {};
 
 chrome.browserAction.onClicked.addListener(onClicked);
 
-var observe = {};
+const observe = {};
 observe.onRemoved = tabId => {
   delete observers[tabId];
   delete icons[tabId];
   observe.check();
 };
-observe.onCompleted = d => {
-  if (d.frameId === 0 && observers[d.tabId]) {
+observe.onCompleted = ({tabId, frameId}) => {
+  if (frameId === 0 && observers[tabId]) {
     // console.log('removing');
-    chrome.webRequest.onBeforeSendHeaders.removeListener(observers[d.tabId]);
-    delete observers[d.tabId];
+    chrome.webRequest.onBeforeSendHeaders.removeListener(observers[tabId]);
+    delete observers[tabId];
     observe.check();
   }
 };
-observe.onCommitted = d => {
-  if (d.frameId === 0 && icons[d.tabId]) {
+observe.onCommitted = ({tabId, frameId}) => {
+  if (frameId === 0 && icons[tabId]) {
     chrome.browserAction.setIcon({
-      tabId: d.tabId,
+      tabId: tabId,
       path: {
         '16': 'data/icons/active/16.png',
         '19': 'data/icons/active/19.png',
@@ -97,13 +111,28 @@ observe.onCommitted = d => {
         '64': 'data/icons/active/64.png'
       }
     });
+    chrome.tabs.executeScript(tabId, {
+      runAt: 'document_start',
+      frameId,
+      code: `{
+        const script = document.createElement('script');
+        script.textContent = \`{
+          const o = '${encodeURIComponent(prefs['ua-' + prefs.mode])}';
+          navigator.__defineGetter__('userAgent', () => {
+            return decodeURIComponent(o);
+          });
+        }\`;
+        document.documentElement.appendChild(script);
+        script.remove();
+      }`
+    });
     if (prefs.css) {
-      chrome.tabs.insertCSS(d.tabId, {
+      chrome.tabs.insertCSS(tabId, {
         code: prefs.css,
         runAt: 'document_start'
       });
     }
-    delete icons[d.tabId];
+    delete icons[tabId];
   }
 };
 observe.install = () => {
@@ -130,6 +159,7 @@ observe.check = () => {
   }
 };
 
+// FAQs and Feedback
 {
   const {onInstalled, setUninstallURL, getManifest} = chrome.runtime;
   const {name, version} = getManifest();
