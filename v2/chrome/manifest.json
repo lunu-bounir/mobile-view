@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Temporary Mobile View",
-  "description": "Temporarily switch the current tab into Android or iOS view",
+  "description": "View current page in the mobile-friendly format by spoofing Android or iOS user-agent string on request header and JavaScript sides",
   "permissions": [
     "webRequest",
     "webRequestBlocking",
@@ -13,9 +13,7 @@
   ],
   "icons": {
     "16": "data/icons/16.png",
-    "19": "data/icons/19.png",
     "32": "data/icons/32.png",
-    "38": "data/icons/38.png",
     "48": "data/icons/48.png",
     "64": "data/icons/64.png",
     "128": "data/icons/128.png",
@@ -23,16 +21,7 @@
     "512": "data/icons/512.png"
   },
   "homepage_url": "https://add0n.com/mobile-view.html",
-  "browser_action":{
-    "default_icon": {
-      "16": "data/icons/16.png",
-      "19": "data/icons/19.png",
-      "32": "data/icons/32.png",
-      "38": "data/icons/38.png",
-      "48": "data/icons/48.png",
-      "64": "data/icons/64.png"
-    }
-  },
+  "browser_action":{},
   "background": {
     "scripts": [
       "background.js"
