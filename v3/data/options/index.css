@@ -48,8 +48,10 @@ a:visited {
 .two {
   display: grid;
   grid-template-columns: min-content 1fr;
-  grid-gap: 5px;
+  grid-gap: 10px;
   margin-bottom: 10px;
+  align-items: center;
+  justify-items: start;
 }
 
 #css {

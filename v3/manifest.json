@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Temporary Mobile View",
   "description": "View current page in the mobile-friendly format by spoofing Android or iOS user-agent string on request header and JavaScript sides",
   "permissions": [
-    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus"
   ],
@@ -12,21 +12,21 @@
     "*://*/*"
   ],
   "icons": {
-    "16": "data/icons/16.png",
-    "32": "data/icons/32.png",
-    "48": "data/icons/48.png",
-    "64": "data/icons/64.png",
-    "128": "data/icons/128.png",
-    "256": "data/icons/256.png",
-    "512": "data/icons/512.png"
+    "16": "/data/icons/16.png",
+    "32": "/data/icons/32.png",
+    "48": "/data/icons/48.png",
+    "64": "/data/icons/64.png",
+    "128": "/data/icons/128.png",
+    "256": "/data/icons/256.png",
+    "512": "/data/icons/512.png"
   },
-  "homepage_url": "https://add0n.com/mobile-view.html",
+  "homepage_url": "https://webextension.org/listing/mobile-view.html",
   "action":{},
   "background": {
     "service_worker": "worker.js"
   },
   "options_ui": {
-    "page": "data/options/index.html"
+    "page": "/data/options/index.html"
   },
   "commands": {
     "_execute_action": {

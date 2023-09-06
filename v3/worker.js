@@ -1,43 +1,38 @@
 'use strict';
 
-const prefs = {
-  'bypass-cache': false,
-  'ua-android': 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36',
-  'ua-ios': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.80 Mobile/15E148 Safari/604.1',
-  'ua-kindle': 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_3; en-us; Silk/1.0.146.3-Gen4_12000410) AppleWebKit/533.16 (KHTML, like Gecko) Version/5.0 Safari/533.16 Silk-Accelerated=true',
-  'mode': 'android',
-  'css': ''
-};
-
-chrome.storage.local.get(prefs, ps => {
-  Object.assign(prefs, ps);
+const context = () => chrome.storage.local.get({
+  'mode': 'android'
+}, prefs => {
   chrome.contextMenus.create({
     title: 'Type: Android',
     id: 'android',
     type: 'radio',
     checked: prefs.mode === 'android',
     contexts: ['action']
-  });
+  }, () => chrome.runtime.lastError);
   chrome.contextMenus.create({
     title: 'Type: iOS',
     id: 'ios',
     type: 'radio',
     checked: prefs.mode === 'ios',
     contexts: ['action']
-  });
+  }, () => chrome.runtime.lastError);
   chrome.contextMenus.create({
     title: 'Type: Kindle',
     id: 'kindle',
     type: 'radio',
     checked: prefs.mode === 'kindle',
     contexts: ['action']
-  });
+  }, () => chrome.runtime.lastError);
   chrome.contextMenus.create({
     title: 'Test my User-Agent',
     id: 'test-ua',
     contexts: ['action']
-  });
+  }, () => chrome.runtime.lastError);
 });
+chrome.runtime.onStartup.addListener(context);
+chrome.runtime.onInstalled.addListener(context);
+
 chrome.contextMenus.onClicked.addListener(info => {
   if (info.menuItemId === 'test-ua') {
     chrome.tabs.create({
@@ -52,7 +47,13 @@ chrome.contextMenus.onClicked.addListener(info => {
 });
 
 chrome.action.onClicked.addListener(tab => {
-  chrome.storage.local.get(prefs, async prefs => {
+  chrome.storage.local.get({
+    'mode': 'android',
+    'ua-android': 'Mozilla/5.0 (Linux; Android 13; Pixel 7 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
+    'ua-ios': 'Mozilla/5.0 (iPhone14,3; U; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/19A346 Safari/602.1',
+    'ua-kindle': 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_3; en-us; Silk/1.0.146.3-Gen4_12000410) AppleWebKit/533.16 (KHTML, like Gecko) Version/5.0 Safari/533.16 Silk-Accelerated=true',
+    'bypass-cache': false
+  }, async prefs => {
     const rules = await chrome.declarativeNetRequest.getSessionRules();
     if (rules.some(r => r.id === tab.id)) {
       await chrome.declarativeNetRequest.updateSessionRules({
@@ -84,9 +85,9 @@ chrome.action.onClicked.addListener(tab => {
       chrome.action.setIcon({
         tabId: tab.id,
         path: {
-          '16': 'data/icons/active/16.png',
-          '32': 'data/icons/active/32.png',
-          '48': 'data/icons/active/48.png'
+          '16': '/data/icons/active/16.png',
+          '32': '/data/icons/active/32.png',
+          '48': '/data/icons/active/48.png'
         }
       });
     }

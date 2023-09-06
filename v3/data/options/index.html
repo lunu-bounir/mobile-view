@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Switch to Mobile View :: Options</title>
+  <title>Options Page :: Temporary Mobile View</title>
   <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
   <div class="two">
      <input type="checkbox" id="bypass-cache">
-     <label for="bypass-cache">Bypass browser's cache when switching to the mobile view</label>
+     <label for="bypass-cache">Bypass <a data-href="faq4" target="_blank">browser's cache</a> when switching to the mobile view</label>
      <span>Android</span>
-     <input type="text" id="ua-android">
+     <textarea rows="5" id="ua-android"></textarea>
      <span>iOS</span>
-     <input type="text" id="ua-ios">
+     <textarea rows="5" id="ua-ios"></textarea>
      <span>Kindle</span>
-     <input type="text" id="ua-kindle">
+     <textarea rows="5" id="ua-kindle"></textarea>
   </div>
 
-  <span>Apply the following styling rules to the page when mobile-view is enabled</span>
+  <span>Apply the following styling rules to the page when mobile-view is enabled (this feature is not yet available)</span>
   <textarea id="css" rows="5" placeholder="e.g.: body {width: 500px !important}"></textarea>
 
-  <div>
+  <p>
     <input type="button" value="Support Development" id="support">
     <input type="button" value="Reset" id="reset">
+  </p>
+  <p>
     <input type="button" value="Save Options" id="save">
     <span id="toast"></span>
-  </div>
+  </p>
   <script src="index.js"></script>
 </body>
 </html>
