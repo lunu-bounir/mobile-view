@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "version": "0.2.3",
+  "version": "0.2.4",
   "name": "Temporary Mobile View",
-  "description": "View current page in the mobile-friendly format by spoofing Android or iOS user-agent string on request header and JavaScript sides",
+  "description": "Display the current page as it appears on mobile devices by using an Android or iOS user-agent string.",
   "permissions": [
     "declarativeNetRequestWithHostAccess",
     "storage",
@@ -21,13 +21,16 @@
     "512": "data/icons/512.png"
   },
   "homepage_url": "https://webextension.org/listing/mobile-view.html",
-  "action":{},
+  "action":{
+    "default_title": "Press once to set the user agent for this tab. Press again to restore the default user agent."
+  },
   "background": {
     "service_worker": "worker.js",
     "scripts": ["worker.js"]
   },
   "options_ui": {
-    "page": "data/options/index.html"
+    "page": "data/options/index.html",
+    "open_in_tab": true
   },
   "commands": {
     "_execute_action": {
@@ -37,7 +40,10 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "{ed915aab-7a3a-4b36-9733-e9c2724f64d9}",
-      "strict_min_version": "128.0"
+      "strict_min_version": "148.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   }
 }
